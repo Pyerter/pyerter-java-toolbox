@@ -42,12 +42,17 @@ public class TensorShape implements Iterable<Integer> {
     }
 
     public int index(int ... indexes) {
-        if (indexes.length != shape.length) throw new IllegalTensorStateException();
+        if (indexes.length > shape.length) throw new IllegalTensorStateException();
+
         int target = 0;
         int jump = 1;
-        for (int i = 0; i < indexes.length; i++) {
-            jump *= shape[shape.length - (i + 1)];
-            target += jump * indexes[i];
+        for (int i = indexes.length - 1; i >= 0; i--) {
+            int currentIndexing = indexes[i];
+            if (currentIndexing < 0) currentIndexing = shape[i] - currentIndexing;
+            if (currentIndexing < 0 || currentIndexing >= shape[i])
+                throw new IndexOutOfBoundsException("Index " + indexes[i] + " out of bounds for range " + shape[i]);
+            jump *= shape[i];
+            target += jump * currentIndexing;
         }
         return target;
     }
@@ -57,9 +62,15 @@ public class TensorShape implements Iterable<Integer> {
     }
 
     public TensorShape peel() {
-        if (shape.length <= 1) return new TensorShape();
-        int[] peeledShape = new int[shape.length - 1];
-        System.arraycopy(shape, 1, peeledShape, 0, shape.length - 1);
+        return peel(1);
+    }
+
+    public TensorShape peel(int layers) {
+        if (layers < 0) throw new IllegalArgumentException("Cannot peel negative layers from " + toString());
+
+        if (shape.length <= layers) return new TensorShape();
+        int[] peeledShape = new int[shape.length - layers];
+        System.arraycopy(shape, layers, peeledShape, 0, shape.length - layers);
         return new TensorShape(peeledShape);
     }
 
