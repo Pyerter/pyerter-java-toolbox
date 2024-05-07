@@ -34,9 +34,11 @@ public class TensorShape implements Iterable<Integer> {
     }
 
     public int prod(int start, int end) {
+        if (start < 0) start = this.shape.length + start;
+        if (start < 0) throw new IllegalArgumentException("start must be bounded between in [-shape.length, shape.length - 1]");
         int total = 1;
         for (int i = start; i < end; i++) {
-            total *= i;
+            total *= shape[i];
         }
         return total;
     }
@@ -46,13 +48,15 @@ public class TensorShape implements Iterable<Integer> {
 
         int target = 0;
         int jump = 1;
-        for (int i = indexes.length - 1; i >= 0; i--) {
-            int currentIndexing = indexes[i];
-            if (currentIndexing < 0) currentIndexing = shape[i] - currentIndexing;
-            if (currentIndexing < 0 || currentIndexing >= shape[i])
-                throw new IndexOutOfBoundsException("Index " + indexes[i] + " out of bounds for range " + shape[i]);
+        for (int i = shape.length - 1; i >= 0; i--) {
+            if (i < indexes.length) {
+                int currentIndexing = indexes[i];
+                if (currentIndexing < 0) currentIndexing = shape[i] + currentIndexing;
+                if (currentIndexing < 0 || currentIndexing >= shape[i])
+                    throw new IndexOutOfBoundsException("Index " + indexes[i] + " out of bounds for range [0, " + shape[i] + "]");
+                target += jump * currentIndexing;
+            }
             jump *= shape[i];
-            target += jump * currentIndexing;
         }
         return target;
     }
