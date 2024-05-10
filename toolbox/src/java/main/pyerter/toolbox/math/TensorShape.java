@@ -8,9 +8,11 @@ import java.util.function.Consumer;
 public class TensorShape implements Iterable<Integer> {
 
     protected int[] shape;
+    protected int baseProd;
 
     public TensorShape(int ... dimensions) {
         this.shape = dimensions.clone();
+        baseProd = prod();
     }
 
     public int get(int index) throws ArrayIndexOutOfBoundsException {
@@ -19,6 +21,10 @@ public class TensorShape implements Iterable<Integer> {
 
     public int dimensions() {
         return shape.length;
+    }
+
+    public int size() {
+        return baseProd;
     }
 
     public int prod() {
