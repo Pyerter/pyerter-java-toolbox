@@ -20,5 +20,10 @@ public abstract class MathHelper <T extends Number> {
     public abstract T inc(T a);
     public abstract T dec(T a);
     public abstract T pow(T a, T power);
+    public abstract T ceil(Double a);
+    public abstract T floor(Double a);
+    public abstract T round(Double a);
+
+    //TODO: Add abstract ceil, floor, and round functions
 
 }

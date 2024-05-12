@@ -51,4 +51,19 @@ public class LongMathHelper extends MathHelper<Long> {
         }
         return result;
     }
+
+    @Override
+    public Long ceil(Double a) {
+        return (long)Math.ceil(a);
+    }
+
+    @Override
+    public Long floor(Double a) {
+        return (long)Math.floor(a);
+    }
+
+    @Override
+    public Long round(Double a) {
+        return Math.round(a);
+    }
 }
