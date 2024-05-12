@@ -1,4 +1,4 @@
-package pyerter.toolbox.math;
+package pyerter.toolbox.math.tensor;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

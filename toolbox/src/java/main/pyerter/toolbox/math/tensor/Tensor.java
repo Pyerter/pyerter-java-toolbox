@@ -1,7 +1,6 @@
-package pyerter.toolbox.math;
+package pyerter.toolbox.math.tensor;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.ParameterizedType;
 
 public class Tensor <T extends Number> {
 
@@ -26,8 +25,11 @@ public class Tensor <T extends Number> {
         this.valuesLocked = false;
     }
 
-    public static Tensor<Integer> getIntTensor(int ... shape) {
-        return new Tensor<>(Integer.class, shape);
+    protected Tensor(Class<T> dtype, TensorShape shape, T[] data) {
+        this.dtype = dtype;
+        this.shape = shape;
+        this.data = data;
+        this.valuesLocked = false;
     }
 
     public TensorShape getShape() {
@@ -76,6 +78,14 @@ public class Tensor <T extends Number> {
         return data;
     }
 
+    public int getRawDataFirstIndex() {
+        return 0;
+    }
+
+    public int getRawDataLength() {
+        return elements();
+    }
+
     public void set(T value, int ... indexes) throws IllegalTensorStateException, IndexOutOfBoundsException {
         if (indexes.length != shape.dimensions()) {
             throw new IllegalTensorStateException(this, indexes, shape.dimensions());
@@ -97,16 +107,6 @@ public class Tensor <T extends Number> {
         Tensor<T> peeledTensor = new Tensor<>(dtype, peeledTensorShape);
         System.arraycopy(data, startIndex, peeledTensor.data, 0, peeledTensorShape.prod());
         return peeledTensor;
-    }
-
-    protected class LazyOperatedTensor <R extends Number> extends Tensor<R> {
-
-        protected boolean initialized = false;
-
-        public LazyOperatedTensor() {
-            super();
-        }
-
     }
 
 }

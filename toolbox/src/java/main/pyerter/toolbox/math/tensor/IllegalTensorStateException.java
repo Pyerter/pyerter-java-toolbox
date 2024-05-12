@@ -1,4 +1,4 @@
-package pyerter.toolbox.math;
+package pyerter.toolbox.math.tensor;
 
 import java.util.Arrays;
 

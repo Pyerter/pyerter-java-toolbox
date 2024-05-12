@@ -1,4 +1,4 @@
-package pyerter.toolbox.math;
+package pyerter.toolbox.math.tensor;
 
 /**
  * A class that allows convolution over a tensor. This allows either iterating directly element-wise over the Tensor

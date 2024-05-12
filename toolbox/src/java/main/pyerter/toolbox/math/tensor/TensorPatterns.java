@@ -1,4 +1,4 @@
-package pyerter.toolbox.math;
+package pyerter.toolbox.math.tensor;
 
 public class TensorPatterns {
 

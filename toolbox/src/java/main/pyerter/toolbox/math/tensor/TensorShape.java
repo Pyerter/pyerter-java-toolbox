@@ -1,4 +1,4 @@
-package pyerter.toolbox.math;
+package pyerter.toolbox.math.tensor;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -89,6 +89,14 @@ public class TensorShape implements Iterable<Integer> {
         int[] peeledShape = new int[shape.length - 1];
         System.arraycopy(shape, 1, peeledShape, 0, shape.length - 1);
         return peeledShape;
+    }
+
+    public boolean fitsIn(TensorShape target) {
+        if (target.dimensions() < dimensions()) return false;
+        for (int i = 0; i < shape.length; i++) {
+            if (target.get(-i) < get(-i)) return false;
+        }
+        return true;
     }
 
     @Override
