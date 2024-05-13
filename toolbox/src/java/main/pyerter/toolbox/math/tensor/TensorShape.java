@@ -8,11 +8,15 @@ import java.util.function.Consumer;
 public class TensorShape implements Iterable<Integer> {
 
     protected int[] shape;
-    protected int baseProd;
+    protected int[] baseProds;
 
     public TensorShape(int ... dimensions) {
         this.shape = dimensions.clone();
-        baseProd = prod();
+        baseProds = new int[shape.length + 1];
+        baseProds[shape.length] = 1;
+        for (int i = shape.length - 1; i >= 0; i--) {
+            baseProds[i] = shape[i] * baseProds[i + 1];
+        }
     }
 
     public int get(int index) throws ArrayIndexOutOfBoundsException {
@@ -24,7 +28,7 @@ public class TensorShape implements Iterable<Integer> {
     }
 
     public int size() {
-        return baseProd;
+        return baseProds[0];
     }
 
     public int prod() {
@@ -47,6 +51,10 @@ public class TensorShape implements Iterable<Integer> {
             total *= shape[i];
         }
         return total;
+    }
+
+    public int indexHopAtDimension(int dim) throws IndexOutOfBoundsException {
+        return baseProds[++dim];
     }
 
     public int index(int ... indexes) {
@@ -95,6 +103,13 @@ public class TensorShape implements Iterable<Integer> {
         if (target.dimensions() < dimensions()) return false;
         for (int i = 0; i < shape.length; i++) {
             if (target.get(-i) < get(-i)) return false;
+        }
+        return true;
+    }
+
+    public boolean onlyOdd() {
+        for (int i = 0; i < shape.length; i++) {
+            if ((shape[i] & 1) == 0) return false;
         }
         return true;
     }

@@ -65,7 +65,7 @@ public class Tensor <T extends Number> {
     }
 
     public T getRaw(int index) throws IndexOutOfBoundsException {
-        return data[index];
+        return index >= 0 ? data[index] : data[data.length + index];
     }
 
     /**
